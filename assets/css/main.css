@@ -1179,6 +1179,47 @@ section,
   fill: #f3268c;
 }
 
+
+/*--------------------------------------------------------------
+# Services Section
+--------------------------------------------------------------*/
+
+.welcome-item {
+  /* background-color: #f8f9fa; */
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(243, 3, 3, 0.1);
+  text-align: center;
+}
+
+.welcome-item h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.welcome-item .description {
+  font-size: 16px;
+  color: #6c757d;
+  margin-bottom: 20px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.cta-btn {
+  background-color: #37ee13; 
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+
+
 /*--------------------------------------------------------------
 # Portfolio Section
 --------------------------------------------------------------*/
