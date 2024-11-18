@@ -1,191 +1,229 @@
-# Complete MikroTik and BenFex Integration Guide
+# Complete BenFex and MikroTik Integration Guide
 
 ## Initial Router Setup
 
-### 1. Reset MikroTik to Factory Settings
-1. Connect to your MikroTik router via Winbox
-2. Go to System → Reset Configuration
+### 1. Reset MikroTik Configuration
+1. Connect to MikroTik via Winbox
+2. System → Reset Configuration
 3. Check "No Default Configuration"
 4. Click "Reset Configuration"
-5. Wait for the router to restart
+5. Wait for router restart
 
-### 2. Initial Access
-1. Connect to the router using MAC address in Winbox
-2. Default login: 
-   - Username: admin
-   - Password: (empty)
-
-### 3. Create New Admin User
-```
+### 2. Create Management User
+```bash
 /user add name=dlang@benfex password=12345678 group=full
 ```
 
-### 4. Basic Interface Setup
-1. Identify and rename your interfaces:
+## Basic Network Configuration
+
+### 1. Set System Identity
+```bash
+/system identity set name="BenFex-Router"
 ```
+
+### 2. Configure Interfaces
+```bash
+# Rename interfaces
 /interface ethernet
 set [ find default-name=ether1 ] name=WAN
 set [ find default-name=ether2 ] name=LAN
+
+# Create bridge interface
+/interface bridge
+add name=BenFex_Bridge
+
+# Add LAN to bridge
+/interface bridge port
+add bridge=BenFex_Bridge interface=LAN
 ```
 
-2. Set up basic IP addressing:
-```
+### 3. Configure IP Addressing
+```bash
+# Add IP to bridge
 /ip address
-add address=192.168.1.1/24 interface=LAN
+add address=192.168.2.1/24 interface=BenFex_Bridge
+
+# Configure WAN (If using DHCP)
+/ip dhcp-client
+add interface=WAN disabled=no
+
+# Configure DNS
+/ip dns
+set allow-remote-requests=yes servers=8.8.8.8,8.8.4.4
 ```
 
-3. Configure WAN interface (choose one):
-   
-   For Dynamic IP (DHCP):
-   ```
-   /ip dhcp-client
-   add interface=WAN disabled=no
-   ```
-   
-   For Static IP:
-   ```
-   /ip address
-   add address=<your-public-ip>/24 interface=WAN
-   /ip route
-   add gateway=<your-gateway>
-   ```
+## Hotspot Configuration
 
-## BenFex Integration Setup
-
-### 1. Configure Network Address Translation (NAT)
+### 1. Create IP Pool
+```bash
+/ip pool
+add name=BenFex-Hotspot-Pool ranges=192.168.2.2-192.168.2.200
 ```
+
+### 2. Configure DHCP Server
+```bash
+/ip dhcp-server
+add address-pool=BenFex-Hotspot-Pool authoritative=yes disabled=no interface=BenFex_Bridge name=BenFex-DHCP lease-time=1h
+
+/ip dhcp-server network
+add address=192.168.2.0/24 gateway=192.168.2.1 dns-server=8.8.8.8
+```
+
+### 3. Configure Hotspot Server
+```bash
+# Create hotspot profile
+/ip hotspot profile
+add name=BenFex-Profile hotspot-address=192.168.2.1 \
+    login-by=cookie,http-chap,https,http-pap \
+    use-radius=yes
+
+# Create hotspot server
+/ip hotspot
+add name=BenFex-Hotspot interface=BenFex_Bridge \
+    address-pool=BenFex-Hotspot-Pool \
+    profile=BenFex-Profile \
+    addresses-per-mac=1 \
+    idle-timeout=5m
+```
+
+## PPPoE Configuration
+
+### 1. Create PPPoE Pool
+```bash
+/ip pool
+add name=BenFex-PPPoE-Pool ranges=172.16.0.2-172.16.0.254
+```
+
+### 2. Configure PPPoE Server
+```bash
+# Create PPPoE profile
+/ppp profile
+add name=BenFex-PPPoE-Profile local-address=172.16.0.1 \
+    remote-address=BenFex-PPPoE-Pool
+
+# Create PPPoE server
+/interface pppoe-server server
+add service-name=BenFex-PPPoE \
+    interface=BenFex_Bridge \
+    default-profile=BenFex-PPPoE-Profile \
+    authentication=chap,mschap1,mschap2 \
+    disabled=no
+```
+
+## RADIUS Integration
+
+### 1. Configure RADIUS
+```bash
+# Add RADIUS server
+/radius
+add address=192.168.2.2 secret=BenFex123 service=hotspot,ppp timeout=3000ms
+
+# Enable RADIUS for PPP
+/ppp aaa
+set use-radius=yes accounting=yes interim-update=1m
+
+# Enable RADIUS incoming
+/radius incoming
+set accept=yes
+```
+
+### 2. NAT Configuration
+```bash
 /ip firewall nat
 add chain=srcnat out-interface=WAN action=masquerade
 ```
 
-### 2. Set up DHCP Server for LAN
-```
-/ip pool
-add name=dhcp-pool ranges=192.168.1.2-192.168.1.254
-
-/ip dhcp-server
-add name=dhcp1 interface=LAN address-pool=dhcp-pool
-add name=dhcp1 interface=LAN lease-time=1h
-
-/ip dhcp-server network
-add address=192.168.1.0/24 gateway=192.168.1.1 dns-server=8.8.8.8
-```
-
-### 3. Configure RADIUS for BenFex
-```
-/radius
-add address=192.168.1.2 secret=benfex123 service=hotspot,ppp authentication=yes accounting=yes
-```
-
-### 4. Hotspot Setup
-1. Create bridge interface:
-```
-/interface bridge
-add name=bridge-hotspot
-/interface bridge port
-add bridge=bridge-hotspot interface=LAN
-```
-
-2. Configure IP pool for hotspot:
-```
-/ip pool
-add name=hs-pool ranges=10.5.50.2-10.5.50.254
-
-/ip address
-add address=10.5.50.1/24 interface=bridge-hotspot
-```
-
-3. Set up hotspot server:
-```
-/ip hotspot profile
-add name=benfex-profile use-radius=yes
-/ip hotspot
-add name=hotspot1 interface=bridge-hotspot address-pool=hs-pool profile=benfex-profile
-```
-
-### 5. PPPoE Setup
-1. Create PPPoE server:
-```
-/interface pppoe-server server
-add authentication=chap,mschap1,mschap2 default-profile=pppoe-profile interface=LAN service-name=BenFex-PPPoE
-
-/ppp profile
-add name=pppoe-profile local-address=172.16.0.1 remote-address=pppoe-pool
-
-/ip pool
-add name=pppoe-pool ranges=172.16.0.2-172.16.0.254
-```
-
-2. Enable RADIUS authentication for PPP:
-```
-/ppp aaa
-set use-radius=yes accounting=yes interim-update=1m
-```
-
-## BenFex Configuration
+## BenFex System Configuration
 
 1. Log into your BenFex dashboard
-
-2. Configure RADIUS Settings:
-   - Go to Settings → RADIUS
-   - NAS IP Address: 192.168.1.1 (Your MikroTik IP)
-   - Secret: benfex123 (Same as configured in MikroTik)
+2. Navigate to Settings → RADIUS
+3. Configure RADIUS settings:
+   - NAS IP: 192.168.2.1 (MikroTik IP)
+   - Secret Key: BenFex123
    - Click Save
 
-3. Create a Plan:
-   - Go to Plans
-   - Create a new plan with desired:
-     - Name (e.g., "Basic Plan")
-     - Price
-     - Validity period
-     - Bandwidth limits
-     - Click Save
+## Creating Test Plans and Users
 
-4. Create a Test User:
-   - Go to Users → Add User
-   - Fill in:
-     - Username
-     - Password
-     - Select the plan you created
-     - Click Save
+### 1. Create Plans in BenFex
+1. Go to Plans → Add Plan
+2. Create Basic Plan:
+   - Name: BenFex-Basic
+   - Price: (as needed)
+   - Data Limit: (as needed)
+   - Time Limit: (as needed)
+   - Bandwidth: (as needed)
 
-## Testing the Setup
+### 2. Create Test User
+1. Go to Users → Add User
+2. Fill in:
+   - Username: test@benfex
+   - Password: test123
+   - Select BenFex-Basic plan
+   - Save
 
-1. Test Hotspot:
-   - Connect a device to the LAN port
-   - Open a browser
-   - You should see the hotspot login page
-   - Try logging in with the test user credentials
+## Verification and Testing
 
-2. Test PPPoE:
-   - Create a PPPoE connection on a test computer
-   - Use the test user credentials
-   - Verify connection success
-
-## Troubleshooting Tips
-
-1. Check RADIUS connectivity:
-```
+### 1. Test RADIUS Connection
+```bash
 /radius monitor 0
 ```
 
-2. View active users:
-```
+### 2. View Active Users
+```bash
+# Check hotspot users
 /ip hotspot active print
+
+# Check PPPoE users
 /ppp active print
 ```
 
-3. Check system logs:
-```
-/log print
-```
+### 3. Test User Access
+1. Connect device to LAN port
+2. For Hotspot:
+   - Open browser
+   - Login with test credentials
+3. For PPPoE:
+   - Create PPPoE connection
+   - Use test credentials
 
 ## Important Notes
 
-- Replace 192.168.1.2 with your actual BenFex server IP
-- Adjust IP ranges and addresses according to your network plan
-- The RADIUS secret (benfex123) should be changed to something secure
-- Make sure to secure your MikroTik management access
-- Regular backups of both MikroTik and BenFex configurations are recommended
+1. Security Considerations:
+   - Change default password for dlang@benfex
+   - Use strong RADIUS secret
+   - Secure management access
 
-Would you like me to explain any part of this setup in more detail or proceed with a specific section of the configuration?
+2. Backup Configuration:
+```bash
+/system backup save name=benfex-config
+```
+
+3. Troubleshooting Commands:
+```bash
+# View system logs
+/log print
+
+# Check DHCP leases
+/ip dhcp-server lease print
+
+# Monitor interface traffic
+/interface monitor-traffic BenFex_Bridge
+```
+
+## Common Issues and Solutions
+
+1. RADIUS Authentication Fails:
+   - Verify RADIUS secret matches in both systems
+   - Check IP connectivity between MikroTik and BenFex
+   - Ensure correct services enabled in RADIUS configuration
+
+2. Users Can't Connect:
+   - Verify bridge configuration
+   - Check DHCP server status
+   - Confirm IP addressing is correct
+
+3. Bandwidth Limits Not Working:
+   - Verify plan configuration in BenFex
+   - Check RADIUS attributes
+   - Monitor queue usage
+
