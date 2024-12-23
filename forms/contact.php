@@ -1,39 +1,126 @@
 <?php
-  /**
-  * Requires the "PHP Email Form" library
-  * The library should be uploaded to: vendor/php-email-form/php-email-form.php
-  */
 
-  // Replace contact@example.com with your real receiving email address
-  $receiving_email_address = 'contact@example.com';
+$name = $_POST["name"];
+$email = $_POST["email"];
+$subject = $_POST["subject"];
+$message = $_POST["message"];
 
-  if( file_exists($php_email_form = '../assets/vendor/php-email-form/php-email-form.php' )) {
-    include( $php_email_form );
-  } else {
-    die( 'Unable to load the "PHP Email Form" Library!');
-  }
+require "vendor/autoload.php";
 
-  $contact = new PHP_Email_Form;
-  $contact->ajax = true;
-  
-  $contact->to = $receiving_email_address;
-  $contact->from_name = $_POST['name'];
-  $contact->from_email = $_POST['email'];
-  $contact->subject = $_POST['subject'];
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 
-  // Uncomment below code if you want to use SMTP to send emails. You need to enter your correct SMTP credentials
-  /*
-  $contact->smtp = array(
-    'host' => 'example.com',
-    'username' => 'example',
-    'password' => 'pass',
-    'port' => '587'
-  );
-  */
+$mail = new PHPMailer(true);
 
-  $contact->add_message( $_POST['name'], 'From');
-  $contact->add_message( $_POST['email'], 'Email');
-  $contact->add_message( $_POST['message'], 'Message', 10);
+// $mail->SMTPDebug = SMTP::DEBUG_SERVER;
 
-  echo $contact->send();
-?>
+$mail->isSMTP();
+$mail->SMTPAuth = true;
+
+$mail->Host = "smtp.gmail.com";
+$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+$mail->Port = 587;
+
+$mail->Username = "amoskiprotich1130@gmail.com";
+$mail->Password = "jbsiqaxldpxonsgf";
+
+$mail->setFrom($email, $name);
+$mail->addAddress("benfex254@gmail.com", "Kiprotich");
+
+$mail->Subject = $subject;
+
+// HTML email content
+$mail->isHTML(true);
+$mail->Body = "
+    <html>
+    <head>
+        <style>
+            body {
+                font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+                line-height: 1.6;
+                color: #37474f;
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #f5f5f5;
+            }
+            .container {
+                background-color: white;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                overflow: hidden;
+            }
+            .header {
+                background-color: #00796b;
+                color: white;
+                text-align: center;
+                padding: 18px;
+            }
+            .content {
+                padding: 25px;
+            }
+            .detail {
+                margin-bottom: 15px;
+                padding-bottom: 12px;
+                border-bottom: 1px solid #e0e0e0;
+            }
+            .detail strong {
+                color: #00796b;
+                display: block;
+                margin-bottom: 5px;
+                font-weight: 600;
+            }
+            .message {
+                background-color: #f1f8e9;
+                border-left: 5px solid #00796b;
+                padding: 15px;
+                margin-top: 10px;
+            }
+            .footer {
+                background-color: #e0e0e0;
+                text-align: center;
+                padding: 12px;
+                font-size: 11px;
+                color: #616161;
+            }
+        </style>
+    </head>
+    <body>
+        <div class='container'>
+            <div class='header'>
+                <h2>BenFex Networks</h2>
+            </div>
+            <div class='content'>
+                <div class='detail'>
+                    <strong>From</strong>
+                    $name
+                </div>
+                <div class='detail'>
+                    <strong>Sender's Email</strong>
+                    $email
+                </div>
+                <div class='detail'>
+                    <strong>Topic</strong>
+                    $subject
+                </div>
+                <div class='message'>
+                    <strong>Message Body</strong> <br>
+                    $message
+                </div>
+            </div>
+            <div class='footer'>
+                    This email was sent through BenFex website contact form <br>
+                © " . date('Y') . " <strong>Kiprotich</strong> All Rights Reserved
+            </div>
+        </div>
+    </body>
+    </html>
+";
+
+
+try {
+    $mail->send();
+    echo json_encode(["status" => "success", "message" => "Your message has been sent."]);
+} catch (Exception $e) {
+    echo json_encode(["status" => "error", "message" => "Failed to send message: " . $e->getMessage()]);
+}
+exit;

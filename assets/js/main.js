@@ -1,10 +1,3 @@
-/**
-* Template Name: Company
-* Template URL: https://bootstrapmade.com/company-free-html-bootstrap-template/
-* Updated: Aug 07 2024 with Bootstrap v5.3.3
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-*/
 
 (function() {
   "use strict";
@@ -192,3 +185,11 @@
   window.addEventListener("load", initSwiper);
 
 })();
+
+function openWhatsApp() {
+  const message = document.getElementById('whatsapp-input').value;
+  const phoneNumber = '254700760386'; // Your phone number without '+' or spaces
+  const encodedMessage = encodeURIComponent(message);
+  window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+  document.getElementById('whatsapp-input').value = ''; // Clear input after sending
+}

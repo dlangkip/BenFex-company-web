@@ -112,7 +112,7 @@
                 <i class="bi bi-envelope flex-shrink-0"></i>
                 <div>
                   <h4>Email:</h4>
-                  <p>benfex@gmail.com</p>
+                  <p>benfex254@gmail.com</p>
                 </div>
               </div><!-- End Info Item -->
 
@@ -120,7 +120,7 @@
                 <i class="bi bi-phone flex-shrink-0"></i>
                 <div>
                   <h4>Call:</h4>
-                  <p>+254 700 000 000</p>
+                  <p>+254 700 760 000</p>
                 </div>
               </div><!-- End Info Item -->
 
@@ -129,29 +129,66 @@
           </div>
 
           <div class="col-lg-8">
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
-              <div class="row">
-                <div class="col-md-6 form-group">
-                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required="">
+            <form id="contactForm" method="post" action="forms/contact.php" class="php-email-form display-grid row-gap-1-rem">
+              <div class="row gy-4">
+                <div class="col-md-6">
+                  <input type="text" name="name" class="form-control" placeholder="Your Name" id="name" required>
                 </div>
-                <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required="">
+                <div class="col-md-6">
+                  <input type="email" name="email" class="form-control" placeholder="Your Email" id="email" required>
                 </div>
-              </div>
-              <div class="form-group mt-3">
-                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required="">
-              </div>
-              <div class="form-group mt-3">
-                <textarea class="form-control" name="message" placeholder="Message" required=""></textarea>
-              </div>
-              <div class="my-3">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
+                <div class="col-md-12">
+                  <input type="text" name="subject" class="form-control" placeholder="Subject" id="subject" required>
+                </div>
+                <div class="col-md-12">
+                  <textarea name="message" class="form-control" rows="6" placeholder="Message" id="message" required></textarea>
+                </div>
+                <div class="col-md-12 text-center">
+                  <button type="submit">Send</button>
+                </div>
+                <!-- Loading and sent messages -->
+                <div class="loading">Loading...</div>
                 <div class="sent-message">Your message has been sent. Thank you!</div>
               </div>
-              <div class="text-center"><button type="submit">Send Message</button></div>
             </form>
-          </div><!-- End Contact Form -->
+          </div>
+          
+          <script>
+            document.getElementById('contactForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+            
+                // Show the loading message
+                document.querySelector('.loading').style.display = 'block';
+            
+                // Gather form data
+                const formData = new FormData(this);
+            
+                // Send AJAX request to contact.php
+                fetch('forms/contact.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelector('.loading').style.display = 'none';
+            
+                    if (data.status === 'success') {
+                        document.querySelector('.sent-message').style.display = 'block';
+            
+                        // Reload the form or page after a short delay
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
+                    } else {
+                        alert(data.message); // Display error message
+                    }
+                })
+                .catch(error => {
+                    document.querySelector('.loading').style.display = 'none';
+                    alert("There was an error submitting the form. Please try again.");
+                });
+            });
+            </script>
 
         </div>
 
@@ -171,8 +208,8 @@
           </a>
           <div class="footer-contact pt-3">
             <p>Nairobi, KE 00100</p>
-            <p class="mt-3"><strong>Phone:</strong> <span>+254 700 000 000</span></p>
-            <p><strong>Email:</strong> <span>benfex@gmail.com</span></p>
+            <p class="mt-3"><strong>Phone:</strong> <span>+254 700 760 386</span></p>
+            <p><strong>Email:</strong> <span>benfex254@gmail.com</span></p>
           </div>
           <div class="social-links d-flex mt-4">
             <a href=""><i class="bi bi-twitter-x"></i></a>
@@ -203,17 +240,32 @@
           </ul>
         </div>
 
-        <div class="col-lg-4 col-md-12 footer-newsletter">
-          <h4>Our Newsletter</h4>
-          <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>
-          <form action="forms/newsletter.php" method="post" class="php-email-form">
-            <div class="newsletter-form"><input type="email" name="email"><input type="submit" value="Subscribe"></div>
-            <div class="loading">Loading</div>
-            <div class="error-message"></div>
-            <div class="sent-message">Your subscription request has been sent. Thank you!</div>
-          </form>
-        </div>
-
+        <div class="col-lg-4 col-md-12 footer-whatsapp">
+          <div class="whatsapp-widget">
+            <div class="whatsapp-header">
+              <div class="header-content">
+                <div class="profile-icon">
+                  <i class="bi bi-whatsapp"></i>
+                </div>
+                <div class="profile-info">
+                  <h4>Chat with Us</h4>
+                  <p>Online</p>
+                </div>
+              </div>
+            </div>
+            <div class="chat-body">
+              <div class="welcome-message">
+                <p>👋 Hello! How can we help you today?</p>
+              </div>
+              <div class="chat-input">
+                <input type="text" id="whatsapp-input" placeholder="Type your message...">
+                <button onclick="openWhatsApp()" class="send-btn">
+                  <i class="bi bi-send"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>      
       </div>
     </div>
 

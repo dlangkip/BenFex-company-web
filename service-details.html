@@ -146,8 +146,8 @@
           </a>
           <div class="footer-contact pt-3">
             <p>Nairobi, KE 00100</p>
-            <p class="mt-3"><strong>Phone:</strong> <span>+254 700 000 000</span></p>
-            <p><strong>Email:</strong> <span>benfex@gmail.com</span></p>
+            <p class="mt-3"><strong>Phone:</strong> <span>+254 700 760 386</span></p>
+            <p><strong>Email:</strong> <span>benfex254@gmail.com</span></p>
           </div>
           <div class="social-links d-flex mt-4">
             <a href=""><i class="bi bi-twitter-x"></i></a>
@@ -178,16 +178,32 @@
           </ul>
         </div>
 
-        <div class="col-lg-4 col-md-12 footer-newsletter">
-          <h4>Our Newsletter</h4>
-          <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>
-          <form action="forms/newsletter.php" method="post" class="php-email-form">
-            <div class="newsletter-form"><input type="email" name="email"><input type="submit" value="Subscribe"></div>
-            <div class="loading">Loading</div>
-            <div class="error-message"></div>
-            <div class="sent-message">Your subscription request has been sent. Thank you!</div>
-          </form>
-        </div>
+        <div class="col-lg-4 col-md-12 footer-whatsapp">
+          <div class="whatsapp-widget">
+            <div class="whatsapp-header">
+              <div class="header-content">
+                <div class="profile-icon">
+                  <i class="bi bi-whatsapp"></i>
+                </div>
+                <div class="profile-info">
+                  <h4>Chat with Us</h4>
+                  <p>Online</p>
+                </div>
+              </div>
+            </div>
+            <div class="chat-body">
+              <div class="welcome-message">
+                <p>👋 Hello! How can we help you today?</p>
+              </div>
+              <div class="chat-input">
+                <input type="text" id="whatsapp-input" placeholder="Type your message...">
+                <button onclick="openWhatsApp()" class="send-btn">
+                  <i class="bi bi-send"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>      
 
       </div>
     </div>
