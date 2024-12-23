@@ -566,16 +566,16 @@ h6 {
 }
 
 .whatsapp-widget {
-  background: #fff;
+  background: #111b21;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .whatsapp-header {
-  background: #25D366;
+  background: #202c33;
   padding: 20px;
-  color: white;
+  color: #e9edef;
 }
 
 .header-content {
@@ -587,7 +587,7 @@ h6 {
 .profile-icon {
   width: 45px;
   height: 45px;
-  background: white;
+  background: #00a884;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -595,7 +595,7 @@ h6 {
 }
 
 .profile-icon i {
-  color: #25D366;
+  color: #e9edef;
   font-size: 24px;
 }
 
@@ -603,20 +603,22 @@ h6 {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
+  color: #e9edef;
 }
 
 .profile-info p {
   margin: 5px 0 0;
   font-size: 14px;
-  opacity: 0.9;
+  color: #8696a0;
 }
 
 .chat-body {
   padding: 20px;
+  background: #111b21;
 }
 
 .welcome-message {
-  background: #f0f2f5;
+  background: #202c33;
   padding: 15px;
   border-radius: 10px;
   margin-bottom: 20px;
@@ -624,7 +626,7 @@ h6 {
 
 .welcome-message p {
   margin: 0;
-  color: #444;
+  color: #e9edef;
 }
 
 .chat-input {
@@ -635,23 +637,29 @@ h6 {
 #whatsapp-input {
   flex: 1;
   padding: 12px 15px;
-  border: 1px solid #ddd;
+  border: 1px solid #2a3942;
   border-radius: 25px;
   outline: none;
   font-size: 14px;
+  background: #2a3942;
+  color: #e9edef;
 }
 
 #whatsapp-input:focus {
-  border-color: #25D366;
+  border-color: #00a884;
+}
+
+#whatsapp-input::placeholder {
+  color: #8696a0;
 }
 
 .send-btn {
   width: 45px;
   height: 45px;
-  background: #25D366;
+  background: #00a884;
   border: none;
   border-radius: 50%;
-  color: white;
+  color: #e9edef;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -660,7 +668,7 @@ h6 {
 }
 
 .send-btn:hover {
-  background: #22c15e;
+  background: #009674;
 }
 
 .send-btn i {
