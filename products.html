@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Contact - BenFex Softwares</title>
+  <title>Policy - BenFex Softwares</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
@@ -29,7 +29,7 @@
 
 </head>
 
-<body class="contact-page">
+<body class="terms-page">
 
   <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container position-relative d-flex align-items-center">
@@ -50,9 +50,9 @@
             </ul>
           </li>
           <li><a href="services.html">Services</a></li>
-          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="pricing.html" class="active">Pricing</a></li>
           <li><a href="login.html">Portal</a></li>
-          <li><a href="contact.html" class="active">Contact</a></li>
+          <li><a href="contact.html">Contact</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
@@ -72,129 +72,105 @@
     <!-- Page Title -->
     <div class="page-title accent-background">
       <div class="container d-lg-flex justify-content-between align-items-center">
-        <h1 class="mb-2 mb-lg-0">Contact</h1>
+        <h1 class="mb-2 mb-lg-0">Policy</h1>
         <nav class="breadcrumbs">
           <ol>
             <li><a href="index.html">Home</a></li>
-            <li class="current">Contact</li>
+            <li class="current">Policy</li>
           </ol>
         </nav>
       </div>
     </div><!-- End Page Title -->
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact section">
-
-      <div class="mb-5">
-        <iframe style="width: 100%; height: 400px;" 
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127641.170442983!2d36.76482416079134!3d-1.3030359727715461!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f1172d84d49a7%3A0xf7cf0254b297924c!2sNairobi!5e0!3m2!1sen!2ske!4v1730979401803!5m2!1sen!2ske" 
-        frameborder="0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-</iframe>
-      <div class="container" data-aos="fade">
-
-        <div class="row gy-5 gx-lg-5">
-
-          <div class="col-lg-4">
-
-            <div class="info">
-              <h3>Get in touch</h3>
-              <p>Thank you for reaching out! Please leave your details and message below, and we’ll get back to you as soon as possible.</p>
-
-              <div class="info-item d-flex">
-                <i class="bi bi-geo-alt flex-shrink-0"></i>
-                <div>
-                  <h4>Location:</h4>
-                  <p>Nairobi, KE 00100</p>
-                </div>
-              </div><!-- End Info Item -->
-
-              <div class="info-item d-flex">
-                <i class="bi bi-envelope flex-shrink-0"></i>
-                <div>
-                  <h4>Email:</h4>
-                  <p>benfex254@gmail.com</p>
-                </div>
-              </div><!-- End Info Item -->
-
-              <div class="info-item d-flex">
-                <i class="bi bi-phone flex-shrink-0"></i>
-                <div>
-                  <h4>Call:</h4>
-                  <p>+254 700 760 000</p>
-                </div>
-              </div><!-- End Info Item -->
-
-            </div>
-
+<!-- Terms Section -->
+<section id="Services" class="services section bg-light py-5">
+    <div class="container">
+      <div class="row gy-4 justify-content-center">
+        
+        <!-- ISP Billing Section -->
+        <section id="isp-section" class="col-lg-8 mb-4">
+          <div class="text-center mb-4">
+            <h2 class="font-weight-bold text-dark">ISP Billing</h2>
+            <p class="text-muted">Simplify your billing processes with our comprehensive ISP billing solution, offering automated invoicing, account management, and secure payment integrations.</p>
           </div>
-
-          <div class="col-lg-8">
-            <form id="contactForm" method="post" action="forms/contact.php" class="php-email-form display-grid row-gap-1-rem">
-              <div class="row gy-4">
-                <div class="col-md-6">
-                  <input type="text" name="name" class="form-control" placeholder="Your Name" id="name" required>
-                </div>
-                <div class="col-md-6">
-                  <input type="email" name="email" class="form-control" placeholder="Your Email" id="email" required>
-                </div>
-                <div class="col-md-12">
-                  <input type="text" name="subject" class="form-control" placeholder="Subject" id="subject" required>
-                </div>
-                <div class="col-md-12">
-                  <textarea name="message" class="form-control" rows="6" placeholder="Message" id="message" required></textarea>
-                </div>
-                <div class="col-md-12 text-center">
-                  <button type="submit">Send</button>
-                </div>
-                <!-- Loading and sent messages -->
-                <div class="loading">Loading...</div>
-                <div class="sent-message">Your message has been sent. Thank you!</div>
-              </div>
-            </form>
+          <div class="services-section mb-4">
+            <h3 class="text-secondary font-weight-semibold">Automated Invoicing</h3>
+            <p class="text-dark">Automatically generate invoices and send them to customers with ease, saving time and reducing errors.</p>
           </div>
-          
-          <script>
-            document.getElementById('contactForm').addEventListener('submit', function(event) {
-                event.preventDefault();
-            
-                // Show the loading message
-                document.querySelector('.loading').style.display = 'block';
-            
-                // Gather form data
-                const formData = new FormData(this);
-            
-                // Send AJAX request to contact.php
-                fetch('forms/contact.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    document.querySelector('.loading').style.display = 'none';
-            
-                    if (data.status === 'success') {
-                        document.querySelector('.sent-message').style.display = 'block';
-            
-                        // Reload the form or page after a short delay
-                        setTimeout(function() {
-                            window.location.reload();
-                        }, 2000);
-                    } else {
-                        alert(data.message); // Display error message
-                    }
-                })
-                .catch(error => {
-                    document.querySelector('.loading').style.display = 'none';
-                    alert("There was an error submitting the form. Please try again.");
-                });
-            });
-            </script>
-
-        </div>
-
+          <div class="services-section mb-4">
+            <h3 class="text-secondary font-weight-semibold">Account Management</h3>
+            <p class="text-dark">Manage customer accounts efficiently, with detailed reporting and usage tracking capabilities.</p>
+          </div>
+          <div class="services-section mb-4">
+            <h3 class="text-secondary font-weight-semibold">Secure Payment Integrations</h3>
+            <p class="text-dark">Offer secure and seamless payment methods to your customers for a smooth billing experience.</p>
+          </div>
+          <div class="text-center">
+            <a href="#get-started" class="cta-btn">Get Started</a>
+          </div>
+        </section>
+  
+        <!-- Bulk SMS Section -->
+        <section id="bulk-sms-section" class="col-lg-8 mb-4">
+          <div class="text-center mb-4">
+            <h2 class="font-weight-bold text-dark">Bulk SMS</h2>
+            <p class="text-muted">Reach your audience instantly with bulk SMS services, allowing you to send mass messages to customers quickly and efficiently.</p>
+          </div>
+          <div class="services-section mb-4">
+            <h3 class="text-secondary font-weight-semibold">Instant Reach</h3>
+            <p class="text-dark">Send messages to thousands of customers instantly, ensuring timely communication for your business.</p>
+          </div>
+          <div class="services-section mb-4">
+            <h3 class="text-secondary font-weight-semibold">Mass Messaging</h3>
+            <p class="text-dark">Effortlessly manage and send mass SMS campaigns to target groups or your entire customer base.</p>
+          </div>
+          <div class="text-center">
+            <a href="#get-started" class="cta-btn">Get Started</a>
+          </div>
+        </section>
+  
+        <!-- Airtime Section -->
+        <section id="airtime-section" class="col-lg-8 mb-4">
+          <div class="text-center mb-4">
+            <h2 class="font-weight-bold text-dark">Airtime</h2>
+            <p class="text-muted">Top-up and manage airtime with ease, offering seamless integration for direct purchases and recharge services.</p>
+          </div>
+          <div class="services-section mb-4">
+            <h3 class="text-secondary font-weight-semibold">Seamless Recharge</h3>
+            <p class="text-dark">Allow users to recharge their mobile phones effortlessly with seamless airtime purchase integration.</p>
+          </div>
+          <div class="services-section mb-4">
+            <h3 class="text-secondary font-weight-semibold">Direct Purchases</h3>
+            <p class="text-dark">Offer customers direct airtime top-up from within your platform or mobile app.</p>
+          </div>
+          <div class="text-center">
+            <a href="#get-started" class="cta-btn">Get Started</a>
+          </div>
+        </section>
+  
+        <!-- WhatsApp API Section -->
+        <section id="whatsapp-section" class="col-lg-8 mb-4">
+          <div class="text-center mb-4">
+            <h2 class="font-weight-bold text-dark">WhatsApp API</h2>
+            <p class="text-muted">Enhance communication with our WhatsApp API, enabling businesses to engage customers via automated messages and interactive communication.</p>
+          </div>
+          <div class="services-section mb-4">
+            <h3 class="text-secondary font-weight-semibold">Automated Messaging</h3>
+            <p class="text-dark">Set up automated messages to engage customers instantly with personalized and timely responses.</p>
+          </div>
+          <div class="services-section mb-4">
+            <h3 class="text-secondary font-weight-semibold">Interactive Communication</h3>
+            <p class="text-dark">Create interactive communication flows to engage your customers with rich media and dynamic content.</p>
+          </div>
+          <div class="text-center">
+            <a href="#get-started" class="cta-btn">Get Started</a>
+          </div>
+        </section>
+        
       </div>
-
-    </section><!-- /Contact Section -->
+    </div>
+  </section>
+  
 
   </main>
 
@@ -266,6 +242,7 @@
             </div>
           </div>
         </div>      
+
       </div>
     </div>
 
