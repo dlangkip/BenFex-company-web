@@ -24,18 +24,17 @@
 ### 2. Configure Interfaces
 ```bash
 # Rename interfaces
-/interface ethernet
-set [ find default-name=ether1 ] name=WAN
-set [ find default-name=ether2 ] name=LAN
+/interface set [find name="ether1"] name="ether1-ISP"
+/interface set [find name="ether2"] name="ether2-LAN"
 
 # Create bridge interface
-/interface bridge
-add name=BenFex_Bridge
+/interface bridge add name=benfex-bridge
 
 # Add LAN to bridge
-/interface bridge port
-add bridge=BenFex_Bridge interface=LAN
-```
+/interface bridge port add bridge=benfex-bridge interface=ether4
+/interface bridge port add bridge=benfex-bridge interface=wlan1
+
+continue
 
 ### 3. Configure IP Addressing
 ```bash
