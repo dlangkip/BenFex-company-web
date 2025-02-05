@@ -1,7 +1,7 @@
 # === Interface Renaming ===
 /interface set [find name=ether1] name=ether1-ISP
 /interface set [find name=ether2] name=ether2-LAN
-/interface set [find name=ether4] name=PPPoE-Client
+/interface set [find name=ether4] name=ether4-PPPoE
 
 # === User Management ===
 /user add name=dlang password=dlang@benfex group=full
